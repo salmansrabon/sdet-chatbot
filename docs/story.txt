@@ -1,0 +1,40 @@
+Road to SDET is an online institute that offers full stack SQA course. We have currently 450+ students and about 300 students doing job at several reputed companies.
+Instructor is Salman Rahman, who is Sr. Software Engineer at Cefalo Bangladesh Ltd, having 9 years of job experience and having ISTQB CTFL certification. Besides him, some other professionals take classes. All of the instructors are skilled and experienced more than 5 years.
+We have 2 course schedule. One is for regular (Fresh graduate and student) and other is for job holders.
+
+About course information:
+Course length: 3 months
+Course duration: 70 hours
+Weekly 3 classes for regular batch and 2 classes for job holder batch.
+
+Regular batch class happens every Monday, Wednesday and Friday from 8:30pm to 10:30pm
+Job holder batch class happens every Saturday and Sunday from 8:30pm to 10:30PM.
+Only CSE, EEE, ETE, ECE and IT backgroud students or Diploma in CSE, CS, IT are eligible to take this course. 
+
+Our course modules are: Manual testing, API testing with postman, performance testing with jmeter, database, Core java with programming problem solving, 
+Selenium with Junit and Testing for web automation, Appium for mobile app automation, BDD with cucumber, API automation with Rest assured, 
+JavaScript with NodeJS, Mocha, Cypress, GitHub and CI/CD with GitHub actions and Jenkins.
+
+We have top 5 facilities. It means when the top 5 performers will get 500 tk reward or discount or incentive each month that will be adjustable with next installment.
+We have 3 months course duration with 3 installment in each month within the payment week.
+For regular batch:
+Installment 1: 3000 tk
+Installment 2: 2500 tk
+Installment 3: 2500 tk
+
+For job holder batch:
+Installment 1: 3500 tk
+Installment 2: 3000 tk
+Installment 3: 3000 tk
+
+Our facilities:
+We provide recorded video and resources to google drive
+We have support members to give you available support
+We have mock interview facilities that is taken by the senior software qa engineers and lead engineers fro reputed software companies that will help you to identify your weakness and prepare for interview
+We also update you resume and linkedin profile
+We provide certificate at the end of this course if you complete minimum 8 projects out of 12 hands on projects.
+
+Contact detail:
+Mobile/Whatsapp: 01686606909
+email: roadtosdet@gmail.com
+URL: https://www.roadtocareer.net

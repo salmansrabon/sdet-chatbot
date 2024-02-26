@@ -1,0 +1,1 @@
+I am from BBA background. Can I enroll this course? | No, only students from CSE, EEE, ETE, ECE, IT backgrounds, or those with a Diploma in CSE, CS, IT are eligible to enroll in the full stack SQA course offered by Road to SDET. Unfortunately, individuals from a BBA background would not meet the eligibility criteria for this particular course
