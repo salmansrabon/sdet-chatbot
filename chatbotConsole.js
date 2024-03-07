@@ -33,7 +33,7 @@ async function getAnswerFromGPT(question, story) {
     const prompt = `The following information is provided about the business:\n${story}\n\nQuestion: ${question}\nAnswer:`;
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo", // Ensure this matches the model you intend to use
+            model: "gpt-4-vision-preview", // Ensure this matches the model you intend to use
             messages: [
                 { "role": "system", "content": "You are a knowledgeable assistant named SDET bot who provides information based on the provided business narrative and you should answer from the point of view of 'Our' instead of using the name Road to SDET in your response." },
                 { "role": "user", "content": prompt }
