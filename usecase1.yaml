@@ -1,0 +1,284 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Use case: Car Workshop Invoice and Service Order systems"
+  description: |
+    This use case assumes the workshop has an on site Sharebox cabinet and all lockers in the cabinet have been pre-reserved as part of the initial configuration. This pool of reservations can be managed by the invoice and service order system through the Sharebox API. Workshop employees are expected to use their invoice and service order system, as well as the Sharebox mobile app to access the lockers. Clients are expected to use an internet-connected mobile device. Workshop admins may use the Sharebox webadmin for advanced tasks and support.
+
+    ## Flow #1: Customer delivers vehicle outside office hours and using Sharebox to provide the key to the garage
+
+    ### First phase, workshop employee creates a service order:
+    - Workshop user ticks a checkbox in the service order system: [X] Use Sharebox
+    - Find available lockers:
+      - Call Sharebox API `/v2/sharebox_get_available_reservations`
+    - Choose an available reservation, by either:
+      - Service order system selects a random, available reservation
+      - Let user select available reservation/location from dropdown
+    - Reserve locker:
+      - Call Sharebox API `/v2/sharebox_change_sub_name` with car registration number
+      - Call Sharebox API `/v2/sharebox_set_reservation_exchange_method` with flag `exchange_method = 'in'` indicating Incoming key
+      - Call Sharebox API `/v2/sharebox_subscription_add_members` with client mobile and optionally parameters when the customer should have access, and when to send notifications
+      - Sharebox sends SMS/push to client with open instructions at the time specified in the `/v2/sharebox_subscription_add_members` API call
+    - Create/update service order in invoicing system: Store Sharebox subscription identifier in the service order
+
+    ### Second phase, when customer delivers the car and its keys:
+    - Client drives to and parks their car at the workshop, locates the Sharebox cabinet
+    - Client uses Sharebox app or weblink to open their Sharebox locker, then drops off the keys and closes the locker
+    - Sharebox assumes the keys have been delivered when the client closes the locker and calls a notification webhook in the service order system. The notification message includes the subscription identifier which was previously stored in the service order
+    - In response to webhook notification, the service order system updates the service order on their side with a flag Keys are in the box
+
+    ### Third phase, when workshop employee fetches the keys:
+    - Workshop employees can see in the service order system "Keys are in the box", and walks to the Sharebox cabinet
+    - Workshop employee uses the Sharebox app to open the Sharebox locker and picks up the keys
+    - Sharebox assumes the keys have been picked up when the employee closes the locker, and automatically releases the reservation, clears the car registration number and car owner, and optionally calls a notification webhook in the service order system
+    - In response to webhook notification, the invoicing system updates the service order on their side with a flag Keys have been delivered and picked up
+
+    ## Do it on your own hand:
+
+paths:
+  /auth/token:
+    post:
+      tags:
+        - Auth
+      summary: Obtain access token
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: grant_type
+          in: formData
+          description: Type of grant (e.g., client_credentials)
+          required: true
+          type: string
+        - name: client_id
+          in: formData
+          description: Client ID
+          required: true
+          type: string
+        - name: client_secret
+          in: formData
+          description: Client Secret
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              token_type:
+                type: string
+                example: bearer
+              scope:
+                type: string
+                example: create
+              access_token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              refresh_token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              expires_in:
+                type: integer
+                example: 3600
+  /v2/sharebox_get_available_reservations:
+    description: Do it on your own hand
+    post:
+      summary: Get available reservations in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              location_id:
+                type: integer
+                example: 19
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              reservations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    location_id:
+                      type: integer
+                    location:
+                      type: string
+                    address:
+                      type: string
+                    zipcode:
+                      type: string
+                    city:
+                      type: string
+                    country:
+                      type: string
+                    cabinet_id:
+                      type: integer
+                    locker_no:
+                      type: integer
+                    reservation_id:
+                      type: integer
+                    subscription_id:
+                      type: integer
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error  
+
+  /v2/sharebox_change_sub_name:
+      post:
+        summary: Change the name of a subscription in Sharebox
+        tags:
+          - Subscription v2
+        parameters:
+          - name: Authorization
+            in: header
+            description: Bearer Token
+            required: true
+            type: string
+            format: token
+          - name: body
+            in: body
+            description: Request body
+            required: true
+            schema:
+              type: object
+              properties:
+                subscription_id:
+                  type: integer
+                  example: 714
+                new_name:
+                  type: string
+                  example: "Locker 12"
+        responses:
+          '200':
+            description: Successful dummy response
+            schema:
+              type: object
+              properties:
+                result_code:
+                  type: integer
+                error_message:
+                  type: string
+                error_type:
+                  type: string
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+          '500':
+            description: Internal Server Error        
+
+  /v2/sharebox_set_reservation_exchange_method:
+    post:
+      summary: Set reservation exchange method in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+  /v2/sharebox_subscription_add_members:
+    post:
+      summary: Add members to a subscription in Sharebox
+      tags:
+        - Subscription v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 958
+              receiving_mob_numbers:
+                type: array
+                items:
+                  type: string
+                  example: "+5548484454"
+              opening_allowed_from:
+                type: string
+                format: date-time
+                example: "2019-01-01 00:00:00"
+              opening_allowed_to:
+                type: string
+                format: date-time
+                example: "2029-01-07 00:00:00"
+              opening_max:
+                type: integer
+                example: 1
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    mobile:
+                      type: string
+                    email:
+                      type: string
+                    receiver_id:
+                      type: integer
+                    deleted:
+                      type: integer
+                    active:
+                      type: integer
+                    weblink_url:
+                      type: string
+                    web_uuid:
+                      type: string
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error                

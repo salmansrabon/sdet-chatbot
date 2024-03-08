@@ -1,0 +1,1609 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Sharebox v2 API Documentation
+  description: |
+    ## Welcome to the Sharebox API! This REST API reference document describes the communication protocol between the Sharebox server and Sharebox apps.
+host: "localhost:3000"  # Specify the base URL for your web server
+schemes:
+  - "http"
+
+paths:
+  /auth/token:
+    post:
+      tags:
+        - Auth
+      summary: Obtain access token
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: grant_type
+          in: formData
+          description: Type of grant (e.g., client_credentials)
+          required: true
+          type: string
+        - name: client_id
+          in: formData
+          description: Client ID
+          required: true
+          type: string
+        - name: client_secret
+          in: formData
+          description: Client Secret
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              token_type:
+                type: string
+                example: bearer
+              scope:
+                type: string
+                example: create
+              access_token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              refresh_token:
+                type: string
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.....
+              expires_in:
+                type: integer
+                example: 3600
+  /v2/sharebox_get_contacts:
+    post:
+      tags:
+        - Home v2
+      summary: Add members to Sharebox subscription
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          example: bearer <access_token>
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: d9cd8579-475a-467c-b88e-75f9f7671dbf
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              contacts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    mobile:
+                      type: string
+                    firstname:
+                      type: string
+                    lastname:
+                      type: string
+                    thumbnail:
+                      type: string
+                    is_active:
+                      type: integer
+                    is_from_you:
+                      type: integer
+                    is_subscription:
+                      type: integer
+                    unread_messages:
+                      type: integer
+                    last_reservation_date:
+                      type: string
+                      format: date-time
+                    location:
+                      type: string
+                    store_chain_id:
+                      type: integer
+                    active_reservations:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          is_from_you:
+                            type: integer
+                          date:
+                            type: string
+                            format: date-time
+                          reservation_type:
+                            type: integer
+                          location_id:
+                            type: integer
+                          location:
+                            type: string
+                          store_chain_id:
+                            type: integer
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error  
+  /v2/sharebox_get_reservation_details:
+    post:
+      tags:
+        - Home v2 
+      summary: Get reservation details from Sharebox
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: "d9cd8579-475a-467c-b88e-75f9f7671dbf"
+              reservation_id:
+                type: integer
+                example: 124
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              details:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  date:
+                    type: string
+                    format: date-time
+                  locker_id:
+                    type: integer
+                  content:
+                    type: string
+                  cabinet_id:
+                    type: integer
+                  locker_no:
+                    type: integer
+                  column_no:
+                    type: integer
+                  row_no:
+                    type: integer
+                  is_locker_active:
+                    type: integer
+                  is_open_locker_time_out:
+                    type: integer
+                  is_locker_open:
+                    type: integer
+                  is_cabinet_online:
+                    type: integer
+                  cabinet_serial_no:
+                    type: string
+                  location_serial_no:
+                    type: string
+                  reservation_type_id:
+                    type: integer
+                  display_cost_type_1:
+                    type: integer
+                  display_cost_type_2:
+                    type: integer
+                  display_cost_type_3:
+                    type: integer
+                  cost_type_1:
+                    type: integer
+                  cost_type_2:
+                    type: string
+                  cost_type_3:
+                    type: string
+                  currency:
+                    type: string
+                  vat:
+                    type: integer
+                  region_name:
+                    type: string
+                  duration:
+                    type: integer
+                  duration_type:
+                    type: string
+                  max_price:
+                    type: integer
+                  max_duration:
+                    type: integer
+                  status:
+                    type: integer
+                  reserver_customer_id:
+                    type: integer
+                  reserver_firstname:
+                    type: string
+                  reserver_lastname:
+                    type: string
+                  reserver_mobile:
+                    type: string
+                  receiver_id:
+                    type: integer
+                  receiver_mobile:
+                    type: string
+                  receiver_customer_id:
+                    type: integer
+                  receiver_firstname:
+                    type: string
+                  receiver_lastname:
+                    type: string
+                  reserved_by_you:
+                    type: integer
+                  subscription_id:
+                    type: integer
+                  subscription_name:
+                    type: string
+                  price:
+                    type: integer
+                  is_free:
+                    type: integer
+                  free_hours:
+                    type: integer
+                  receivers_count:
+                    type: integer
+              location:
+                type: object
+                properties:
+                  cabinet_id:
+                    type: integer
+                  location_id:
+                    type: integer
+                  name:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  zipcode:
+                    type: string
+                  country:
+                    type: string
+                  longitude:
+                    type: number
+                  latitude:
+                    type: number
+                  store_chain_id:
+                    type: integer
+                  opening_hours:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day_of_week:
+                          type: string
+                        opening_hour:
+                          type: string
+                        closing_hour:
+                          type: string
+              events:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    event_type_id:
+                      type: integer
+                    description:
+                      type: string
+                    registered:
+                      type: string
+                      format: date-time
+                    opened_by_you:
+                      type: integer
+                    customer_id:
+                      type: integer
+                    firstname:
+                      type: string
+                    lastname:
+                      type: string
+                    mobile:
+                      type: string
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    mobile:
+                      type: string
+                    receiver_id:
+                      type: integer
+                    customer_id:
+                      type: integer
+              result_code:
+                type: integer
+              error_message:
+                type: string
+
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error   
+
+  /v2/sharebox_get_active_reservations:
+    post:
+      tags:
+        - Home v2
+      summary: Get active reservations from Sharebox
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: "d9cd8579-475a-467c-b88e-75f9f7671dbf"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              reservations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    reserver_customer_id:
+                      type: integer
+                    date:
+                      type: string
+                      format: date-time
+                    updated:
+                      type: string
+                      format: date-time
+                    status:
+                      type: integer
+                    reservation_type_id:
+                      type: integer
+                    reserver_firstname:
+                      type: string
+                    reserver_lastname:
+                      type: string
+                    reserver_mobile:
+                      type: string
+                    cabinet_id:
+                      type: integer
+                    is_cabinet_online:
+                      type: integer
+                    locker_id:
+                      type: integer
+                    locker_no:
+                      type: integer
+                    is_locker_active:
+                      type: integer
+                    is_locker_open:
+                      type: integer
+                    reserved_by_you:
+                      type: integer
+                    is_subscription:
+                      type: integer
+                    location_id:
+                      type: integer
+                    subscription_id:
+                      type: integer
+                    subscription_name:
+                      type: string
+                    is_free:
+                      type: integer
+                    free_hours:
+                      type: integer
+                    location:
+                      type: object
+                      properties:
+                        cabinet_id:
+                          type: integer
+                        location_id:
+                          type: integer
+                        name:
+                          type: string
+                        address:
+                          type: string
+                        city:
+                          type: string
+                        zipcode:
+                          type: string
+                        country:
+                          type: string
+                        longitude:
+                          type: number
+                        latitude:
+                          type: number
+                        store_chain_id:
+                          type: integer
+                        opening_hours:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              location_id:
+                                type: integer
+                              day_of_week:
+                                type: string
+                              opening_hour:
+                                type: string
+                              closing_hour:
+                                type: string
+                    receivers_count:
+                      type: integer
+                    receiver_first:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        mobile:
+                          type: string
+                        receiver_id:
+                          type: integer
+                        customer_id:
+                          type: integer
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error  
+  /v2/sharebox_get_nonactive_reservations:
+    post:
+      tags:
+        - Home v2
+      summary: Get non-active reservations from Sharebox
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_id:
+                  type: string
+                  example: "{{session_id}}"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              reservations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    reserver_customer_id:
+                      type: integer
+                    date:
+                      type: string
+                      format: date-time
+                    updated:
+                      type: string
+                      format: date-time
+                    status:
+                      type: integer
+                    reservation_type_id:
+                      type: integer
+                    reserver_firstname:
+                      type: string
+                    reserver_lastname:
+                      type: string
+                    reserver_mobile:
+                      type: string
+                    cabinet_id:
+                      type: integer
+                    is_cabinet_online:
+                      type: integer
+                    locker_id:
+                      type: integer
+                    locker_no:
+                      type: integer
+                    is_locker_active:
+                      type: integer
+                    is_locker_open:
+                      type: integer
+                    reserved_by_you:
+                      type: integer
+                    is_subscription:
+                      type: integer
+                    location_id:
+                      type: integer
+                    subscription_id:
+                      type: integer
+                    subscription_name:
+                      type: string
+                    is_free:
+                      type: integer
+                    free_hours:
+                      type: integer
+                    location:
+                      type: object
+                      properties:
+                        cabinet_id:
+                          type: integer
+                        location_id:
+                          type: integer
+                        name:
+                          type: string
+                        address:
+                          type: string
+                        city:
+                          type: string
+                        zipcode:
+                          type: string
+                        country:
+                          type: string
+                        longitude:
+                          type: number
+                        latitude:
+                          type: number
+                        store_chain_id:
+                          type: integer
+                        opening_hours:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              location_id:
+                                type: integer
+                              day_of_week:
+                                type: string
+                              opening_hour:
+                                type: string
+                              closing_hour:
+                                type: string
+                    receivers_count:
+                      type: integer
+                    receiver_first:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        mobile:
+                          type: string
+                        receiver_id:
+                          type: integer
+                        customer_id:
+                          type: integer
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error  
+  /v2/sharebox_get_locations:
+    post:
+      tags:
+        - Location v2
+      summary: Get locations from Sharebox
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_id:
+                  type: string
+                  example: "{{session_id}}"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              locations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    location_id:
+                      type: integer
+                    cabinets:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          cabinet_id:
+                            type: integer
+                          cabinet_serial_no:
+                            type: string
+                          sw_version:
+                            type: string
+                          teamviewer_id:
+                            type: string
+                          uuid:
+                            type: string
+                          online:
+                            type: integer
+                          error:
+                            type: integer
+                          warning:
+                            type: integer
+                          offline_reported:
+                            type: integer
+                          io_expansion_chip: null
+                          io_expansion_version: null
+                          cabinet_gui_version: null
+                          cabinet_interface:
+                            type: string
+                          cabinet_pin_code: null
+                          cabinet_master_pin_code:
+                            type: string
+                          use_sensor_flow:
+                            type: integer
+                          queue_name:
+                            type: string
+                          uptime:
+                            type: number
+                          router_provider: null
+                          router_id: null
+                          last_offline_reported:
+                            type: string
+                            format: date-time
+                          free_lockers:
+                            type: integer
+                          location:
+                            type: string
+                          address:
+                            type: string
+                          location_phone:
+                            type: string
+                          city:
+                            type: string
+                          zipcode:
+                            type: string
+                          country:
+                            type: string
+                          deleted:
+                            type: integer
+                          longitude:
+                            type: number
+                          latitude:
+                            type: number
+                          registered:
+                            type: string
+                            format: date-time
+                          location_serial_no: null
+                          chain_name:
+                            type: string
+                          region:
+                            type: integer
+                          region_name:
+                            type: string
+                          currency:
+                            type: string
+                          cost_type_1:
+                            type: integer
+                          cost_type_2:
+                            type: string
+                          cost_type_3:
+                            type: string
+                          display_cost_type_1:
+                            type: integer
+                          display_cost_type_2:
+                            type: integer
+                          display_cost_type_3:
+                            type: integer
+                          region_country_code:
+                            type: string
+                          cabinet_inventory_item_id: null
+                          cabinet_position_status_id: null
+                          cabinet_type_name: null
+                          cabinet_type_id: null
+                          vat:
+                            type: integer
+                    latitude:
+                      type: number
+                    longitude:
+                      type: number
+                    distance:
+                      type: integer
+                    name:
+                      type: string
+                    address:
+                      type: string
+                    city:
+                      type: string
+                    zipcode:
+                      type: string
+                    country:
+                      type: string
+                    phone_number:
+                      type: string
+                    store_chain_id:
+                      type: integer
+                    region:
+                      type: integer
+                    currency:
+                      type: string
+                    display_cost_type_1:
+                      type: integer
+                    display_cost_type_2:
+                      type: integer
+                    display_cost_type_3:
+                      type: integer
+                    vat:
+                      type: integer
+                    segment: null
+                    chain_name:
+                      type: string
+                    opening_hours:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          day_of_week:
+                            type: string
+                          opening_hour:
+                            type: string
+                          closing_hour:
+                            type: string
+                  required:
+                    - location_id
+                    - cabinets
+                    - latitude
+                    - longitude
+                    - name
+                    - address
+                    - city
+                    - zipcode
+                    - country
+                    - phone_number
+                    - store_chain_id
+                    - region
+                    - currency
+                    - display_cost_type_1
+                    - display_cost_type_2
+                    - display_cost_type_3
+                    - vat
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+  /v2/sharebox_get_location_regions:
+    post:
+      summary: Get location regions from Sharebox
+      tags:
+        - Location v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_id:
+                  type: string
+                  example: "{{session_id}}"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              regions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    region_name:
+                      type: string
+                    currency:
+                      type: string
+                    vat:
+                      type: integer
+                    display_cost_type_1:
+                      type: integer
+                    display_cost_type_2:
+                      type: integer
+                    display_cost_type_3:
+                      type: integer
+                    region_country_code:
+                      type: string
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error      
+  /v2/sharebox_get_location_details:
+    post:
+      summary: Get location details from Sharebox
+      tags:
+        - Location v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: "{{session_id}}"
+              location_id:
+                type: integer
+                example: 1
+              include_all_cabinets:
+                type: boolean
+                example: true
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              location:
+                type: object
+                properties:
+                  location_id:
+                    type: integer
+                  name:
+                    type: string
+                  address:
+                    type: string
+                  city:
+                    type: string
+                  zipcode:
+                    type: string
+                  country:
+                    type: string
+                  country_code:
+                    type: string
+                  longitude:
+                    type: number
+                  latitude:
+                    type: number
+                  phone:
+                    type: string
+                  store_chain_id:
+                    type: integer
+                  deleted:
+                    type: integer
+                  region:
+                    type: integer
+                  region_name:
+                    type: string
+                  currency:
+                    type: string
+                  display_cost_type_1:
+                    type: integer
+                  display_cost_type_2:
+                    type: integer
+                  display_cost_type_3:
+                    type: integer
+                  region_country_code:
+                    type: string
+                  vat:
+                    type: integer
+                  location_url:
+                    type: string
+                  cabinets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        free_lockers:
+                          type: integer
+                        online:
+                          type: integer
+                        cabinet_id:
+                          type: integer
+                  opening_hours:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        location_id:
+                          type: integer
+                        day_of_week:
+                          type: string
+                        opening_hour:
+                          type: string
+                        closing_hour:
+                          type: string
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error    
+  /v2/sharebox_store_chain_status:
+    post:
+      tags:
+        - Location v2
+      summary: Retrieve store chain status from Sharebox
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: "{{session_id}}"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              store_chain_id:
+                type: integer
+              locations:
+                type: array
+                items: {}
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error      
+
+  /v2/sharebox_reserve_locker:
+    post:
+      summary: Reserve a locker in Sharebox
+      tags:
+        - Locker Actions v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Salman Test Reservation
+              reservation_type:
+                type: integer
+                example: 3
+              cabinet_id:
+                type: integer
+                example: 9
+              content:
+                type: string
+                example: other
+              receiving_mob_numbers:
+                type: array
+                items:
+                  type: string
+                example: []
+              customer_id:
+                type: integer
+                example: 47
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              locker_id:
+                type: integer
+              reservation_id:
+                type: integer
+              subscription_id:
+                type: integer
+              locker_info:
+                type: object
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error    
+  /v2/sharebox_open_locker:
+    post:
+      summary: Open a locker in Sharebox
+      tags:
+        - Locker Actions v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Access token (Bearer Token)
+          required: true
+          type: string
+          example: Bearer {access_token}
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              locker_id:
+                type: integer
+                example: 170
+              latitude:
+                type: number
+                format: float
+                example: 0.0
+              longitude:
+                type: number
+                format: float
+                example: 0.0
+              flag:
+                type: integer
+                example: 1
+              finish_flag:
+                type: integer
+                example: 0
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              locker_id:
+                type: integer
+              locker_info:
+                type: object
+                properties:
+                  locker_no:
+                    type: integer
+                  row_no:
+                    type: integer
+                  column_no:
+                    type: integer
+              redirect_url:
+                type: string
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+       
+  /v2/sharebox_subscription_add_members:
+    post:
+      summary: Add members to a subscription in Sharebox
+      tags:
+        - Subscription v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 958
+              receiving_mob_numbers:
+                type: array
+                items:
+                  type: string
+                  example: "+5548484454"
+              opening_allowed_from:
+                type: string
+                format: date-time
+                example: "2019-01-01 00:00:00"
+              opening_allowed_to:
+                type: string
+                format: date-time
+                example: "2029-01-07 00:00:00"
+              opening_max:
+                type: integer
+                example: 1
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    success:
+                      type: boolean
+                    mobile:
+                      type: string
+                    email:
+                      type: string
+                    receiver_id:
+                      type: integer
+                    deleted:
+                      type: integer
+                    active:
+                      type: integer
+                    weblink_url:
+                      type: string
+                    web_uuid:
+                      type: string
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error   
+
+  /v2/sharebox_subscription_remove_member:
+    post:
+      summary: Remove a member from a subscription in Sharebox
+      tags:
+        - Subscription v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 958
+              receiver_id:
+                type: integer
+                example: 2818
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error              
+  /v2/sharebox_subscription_update_member:
+    post:
+      summary: Update a member in a subscription in Sharebox
+      tags:
+        - Subscription v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 958
+              receiver_id:
+                type: integer
+                example: 2819
+              receiving_mob_number:
+                type: string
+                example: "+5548484454"
+              receiving_email:
+                type: string
+                example: "test@grr.la"
+              opening_max:
+                type: integer
+                example: 1
+              opening_allowed_from:
+                type: string
+                format: date-time
+                example: "2019-01-01 00:00:00"
+              opening_allowed_to:
+                type: string
+                format: date-time
+                example: "2019-01-06 00:00:00"
+              reservation_code:
+                type: string
+                example: "12345"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              members:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    receiver_id:
+                      type: integer
+                    reservation_id:
+                      type: integer
+                    mobile:
+                      type: string
+                    email:
+                      type: string
+                    deleted:
+                      type: integer
+                    active:
+                      type: integer
+                    weblink_url:
+                      type: string
+        '400':
+          description: Bad Request
+        '500':
+          description: Internal Server Error
+  /v2/sharebox_change_sub_name:
+      post:
+        summary: Change the name of a subscription in Sharebox
+        tags:
+          - Subscription v2
+        parameters:
+          - name: Authorization
+            in: header
+            description: Bearer Token
+            required: true
+            type: string
+            format: token
+          - name: body
+            in: body
+            description: Request body
+            required: true
+            schema:
+              type: object
+              properties:
+                subscription_id:
+                  type: integer
+                  example: 714
+                new_name:
+                  type: string
+                  example: "Locker 12"
+        responses:
+          '200':
+            description: Successful dummy response
+            schema:
+              type: object
+              properties:
+                result_code:
+                  type: integer
+                error_message:
+                  type: string
+                error_type:
+                  type: string
+          '400':
+            description: Bad Request
+          '401':
+            description: Unauthorized
+          '500':
+            description: Internal Server Error
+
+  /v2/sharebox_change_content:
+    post:
+      summary: Change the content type of a reservation in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              session_id:
+                type: string
+                example: "{{session_id}}"
+              reservation_id:
+                type: integer
+                example: 958
+              new_content:
+                type: string
+                example: "keys"
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              error_type:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error   
+
+  /v2/sharebox_get_available_reservations:
+    post:
+      summary: Get available reservations in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              location_id:
+                type: integer
+                example: 19
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+              reservations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    location_id:
+                      type: integer
+                    location:
+                      type: string
+                    address:
+                      type: string
+                    zipcode:
+                      type: string
+                    city:
+                      type: string
+                    country:
+                      type: string
+                    cabinet_id:
+                      type: integer
+                    locker_no:
+                      type: integer
+                    reservation_id:
+                      type: integer
+                    subscription_id:
+                      type: integer
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error  
+
+  /v2/sharebox_set_reservation_exchange_method:
+    post:
+      summary: Set reservation exchange method in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 957
+              exchange_method:
+                type: string
+                enum: [in, out]
+                example: in
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error    
+
+  /v2/sharebox_reset_reservation:
+    post:
+      summary: Reset reservation in Sharebox
+      tags:
+        - Reservation v2
+      parameters:
+        - name: Authorization
+          in: header
+          description: Bearer Token
+          required: true
+          type: string
+          format: token
+        - name: body
+          in: body
+          description: Request body
+          required: true
+          schema:
+            type: object
+            properties:
+              reservation_id:
+                type: integer
+                example: 958
+      responses:
+        '200':
+          description: Successful dummy response
+          schema:
+            type: object
+            properties:
+              result_code:
+                type: integer
+              error_message:
+                type: string
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error                         
+securityDefinitions:
+  bearerAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: |
+      Please enter the bearer token in the format 'Bearer [token]'.
+  basicAuth:
+    type: basic
+    description: |
+      Please provide your credentials using Basic Authentication.
+
