@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const apiKey = process.env.OPENAI_API_KEY;
 
-async function callAPI1(question) {
+async function callChatBotAPI(question) {
     try {
         const response = await axios.post(`${process.env.BASE_URL}/chat`, { question });
         return response.data.message;
@@ -64,9 +64,9 @@ async function aiBotResponse(req, res) {
         }
 
         if (!imageResponse) {
-            response = await callAPI1(question);
+            response = await callChatBotAPI(question);
         } else {
-            response = await callAPI1("This is the image details: " + imageResponse.content + "\nThis is user question regarding the image: \n" + question);
+            response = await callChatBotAPI("This is the image details: " + imageResponse.content + "\nThis is user question regarding the image: \n" + question);
             console.log(imageResponse.content);
             console.log(question);
         }
