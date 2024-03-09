@@ -73,7 +73,7 @@ async function aiBotResponse(req, res) {
         res.json({ response });
     } catch (error) {
         console.error('Error handling request:', error);
-        res.status(500).json({ error: "Internal server error" });
+        res.status(500).json({ error: "Internal server error"+"\n"+error });
     }
 }
 
