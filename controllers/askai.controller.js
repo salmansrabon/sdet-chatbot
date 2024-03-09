@@ -1,11 +1,12 @@
 const axios = require('axios');
 const fs = require('fs');
+require('dotenv').config();
 
 const apiKey = process.env.OPENAI_API_KEY;
 
 async function callAPI1(question) {
     try {
-        const response = await axios.post('http://localhost:3000/chat', { question });
+        const response = await axios.post(`${process.env.BASE_URL}/chat`, { question });
         return response.data.message;
     } catch (error) {
         console.error('Error calling API 1:', error);
