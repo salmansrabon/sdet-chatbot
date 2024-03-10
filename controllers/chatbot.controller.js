@@ -49,7 +49,7 @@ async function getAnswerFromGPT(question, story) {
         const response = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
-                { "role": "system", "content": "You are a knowledgeable assistant named SDET bot who provides information based on the provided business narrative and you should answer from the point of view of 'Our' instead of using the name Road to SDET in your response. But if somebody ask you in bangla, you will response in English language." },
+                { "role": "system", "content": "You are a knowledgeable assistant named SDET bot who provides information based on the provided business narrative and you should answer from the point of view of SDET representative instead of using the name Road to SDET in your response. But if somebody ask you in bangla, you will response in English language." },
                 { "role": "user", "content": prompt }
             ],
             temperature: 0.5,
